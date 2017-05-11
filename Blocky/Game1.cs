@@ -1,34 +1,30 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
-namespace Blocky
+﻿namespace Blocky
 {
-    using Abstractions;
     using Entities;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
 
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
+        private readonly GraphicsDeviceManager graphics;
 
-        VertexPositionNormalTexture[] floorVerts;
+        private VertexPositionNormalTexture[] floorVerts;
 
-        BasicEffect effect;
+        private BasicEffect effect;
 
-        Texture2D checkerboardTexture;
+        private Texture2D checkerboardTexture;
 
         // New camera code
-        Camera camera;
+        private Camera camera;
 
-        Robot robot;
+        private Robot robot;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
         }
@@ -91,7 +87,7 @@ namespace Blocky
             base.Draw(gameTime);
         }
 
-        void DrawGround()
+        private void DrawGround()
         {
             // New camera code
             effect.View = camera.ViewMatrix;

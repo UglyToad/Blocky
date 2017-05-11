@@ -6,15 +6,14 @@
 
     public class Robot
     {
-        Model model;
+        private Model model;
 
         // new code:
-        float angle;
+        private float angle;
 
         public void Initialize(ContentManager contentManager)
         {
             model = contentManager.Load<Model>("box");
-
         }
 
         public void Update(GameTime gameTime)
@@ -41,7 +40,7 @@
             }
         }
 
-        Matrix GetWorldMatrix()
+        private Matrix GetWorldMatrix()
         {
             const float circleRadius = 8;
             const float heightOffGround = 3;
