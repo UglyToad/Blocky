@@ -28,6 +28,9 @@
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1500;
+            graphics.PreferredBackBufferHeight = 960;
+
 
             Content.RootDirectory = "Content";
         }
