@@ -34,7 +34,7 @@ namespace Blocky.Entities
                 lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
                 lookAtVector += position;
 
-                return Matrix.CreateLookAt(position, lookAtVector, upVector);
+                return Matrix.CreateLookAt(position, position + direction, upVector);
             }
         }
 
@@ -58,9 +58,9 @@ namespace Blocky.Entities
             Mouse.SetPosition(graphicsDevice.Viewport.Width/2, graphicsDevice.Viewport.Height/2);
             mouseState = Mouse.GetState();
             upVector = Vector3.UnitZ;
-            direction = new Vector3(0, 1, -0.3f);
+            direction = new Vector3(0, 1, 0);
         }
-
+       
         public void Update(GameTime gameTime)
         {
             const float speed = 0.5f;
@@ -70,16 +70,16 @@ namespace Blocky.Entities
             var changeVector = new Vector3();
 
             if (state.IsKeyDown(Keys.W))
-                changeVector.Y = 1;
+                position += direction * speed;
             if (state.IsKeyDown(Keys.S))
-                changeVector.Y = -1;
+                position -= direction*speed;
             if (state.IsKeyDown(Keys.A))
             {
-                changeVector.X = -1;
+                position += Vector3.Cross(upVector, direction) * speed;
             }
             if (state.IsKeyDown(Keys.D))
             {
-                changeVector.X = 1;
+                position -= Vector3.Cross(upVector, direction) * speed;
             }
 
             var currentMouseState = Mouse.GetState();
