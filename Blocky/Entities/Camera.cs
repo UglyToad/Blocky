@@ -16,6 +16,8 @@ namespace Blocky.Entities
         private float angle;
         private MouseState mouseState;
 
+        public RotationStates RotationStates { get; } = new RotationStates();
+
         public Matrix ViewMatrix
         {
             get
@@ -73,7 +75,11 @@ namespace Blocky.Entities
             {
                 position.X += speed;
             }
-            
+
+            var currentMouseState = Mouse.GetState();
+
+            RotationStates.X = currentMouseState.X - mouseState.X;
+
             TouchCollection touchCollection = TouchPanel.GetState();
 
             bool isTouchingScreen = touchCollection.Count > 0;
@@ -105,6 +111,7 @@ namespace Blocky.Entities
                 }
             }
 
+            Mouse.SetPosition(graphicsDevice.Viewport.Width/2, graphicsDevice.Viewport.Height/2);
             mouseState = Mouse.GetState();
         }
     }

@@ -17,6 +17,9 @@
 
         private Texture2D checkerboardTexture;
 
+        private SpriteFont font;
+        private SpriteBatch fontBatch;
+
         // New camera code
         private Camera camera;
 
@@ -64,7 +67,9 @@
 
         protected override void LoadContent()
         {
+            fontBatch = new SpriteBatch(graphics.GraphicsDevice);
             checkerboardTexture = Content.Load<Texture2D>("checkerboard");
+            font = Content.Load<SpriteFont>("Courier New");
         }
 
         protected override void Update(GameTime gameTime)
@@ -78,7 +83,20 @@
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            
+            fontBatch.Begin();
+            // 2d drawing
+            string output = camera.RotationStates.X.ToString();
+           
+            fontBatch.DrawString(font, output, new Vector2(20, 20), Color.LightGreen);
+             
+            fontBatch.End();
 
+            // reset rendering for 3d
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             DrawGround();
 
             // New camera code
@@ -107,5 +125,14 @@
                     2);
             }
         }
+    }
+
+    public class RotationStates
+    {
+        public float X { get; set; }
+
+        public float Y { get; set; }
+
+        public float Z { get; set; }
     }
 }
