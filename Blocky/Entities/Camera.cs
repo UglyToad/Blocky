@@ -4,20 +4,23 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Blocky.Entities
 {
+    using Microsoft.Xna.Framework.Input;
+
     public class Camera
     {
         private readonly GraphicsDevice graphicsDevice;
 
         // Let's start at X = 0 so we're looking at things head-on
-        private Vector3 position = new Vector3(0, 20, 10);
+        private Vector3 position = new Vector3(0, -20, 10);
 
         private float angle;
+        private MouseState mouseState;
 
         public Matrix ViewMatrix
         {
             get
             {
-                var lookAtVector = new Vector3(0, -1, -.5f);
+                var lookAtVector = new Vector3(0, 1, -0.3f);
                 // We'll create a rotation matrix using our angle
                 var rotationMatrix = Matrix.CreateRotationZ(angle);
                 // Then we'll modify the vector using this matrix:
@@ -48,10 +51,29 @@ namespace Blocky.Entities
         public Camera(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
+            Mouse.SetPosition(graphicsDevice.Viewport.Width/2, graphicsDevice.Viewport.Height/2);
+            mouseState = Mouse.GetState();
         }
 
         public void Update(GameTime gameTime)
         {
+            const float speed = 0.5f;
+
+            var state = Keyboard.GetState();
+
+            if (state.IsKeyDown(Keys.W))
+                position.Y += speed;
+            if (state.IsKeyDown(Keys.S))
+                position.Y -= speed;
+            if (state.IsKeyDown(Keys.A))
+            {
+                position.X -= speed;
+            }
+            if (state.IsKeyDown(Keys.D))
+            {
+                position.X += speed;
+            }
+            
             TouchCollection touchCollection = TouchPanel.GetState();
 
             bool isTouchingScreen = touchCollection.Count > 0;
@@ -82,6 +104,8 @@ namespace Blocky.Entities
                     angle -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
             }
+
+            mouseState = Mouse.GetState();
         }
     }
 }
