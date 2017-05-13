@@ -76,13 +76,13 @@
             IsMouseVisible = true;
             Mouse.SetPosition(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
 
-            previousState = Mouse.GetState();
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            previousState = Mouse.GetState();
             fontBatch = new SpriteBatch(graphics.GraphicsDevice);
             checkerboardTexture = Content.Load<Texture2D>("checkerboard");
             font = Content.Load<SpriteFont>("Courier New");
