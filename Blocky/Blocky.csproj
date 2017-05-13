@@ -43,8 +43,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Abstractions\IContentManager.cs" />
+    <Compile Include="Entities\BaseCamera.cs" />
     <Compile Include="Entities\Camera.cs" />
     <Compile Include="Entities\Robot.cs" />
+    <Compile Include="Entities\ViewMatrixSettings.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

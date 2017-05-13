@@ -20,24 +20,10 @@ namespace Blocky.Entities
         private Vector3 upVector;
         private Vector3 direction;
 
-        public RotationStates RotationStates { get; } = new RotationStates();
+        //public RotationStates RotationStates { get; } = new RotationStates();
 
-        public Matrix ViewMatrix
-        {
-            get
-            {
-                var lookAtVector = direction;
-                // We'll create a rotation matrix using our angleZ
-                var rotationMatrix = Matrix.CreateRotationZ(angleZ);
-                
-                // Then we'll modify the vector using this matrix:
-                lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
-                lookAtVector += position;
-
-                return Matrix.CreateLookAt(position, position + direction, upVector);
-            }
-        }
-
+        public Matrix ViewMatrix { get; set; }
+        
         public Matrix ProjectionMatrix
         {
             get
@@ -59,6 +45,7 @@ namespace Blocky.Entities
             mouseState = Mouse.GetState();
             upVector = Vector3.UnitZ;
             direction = new Vector3(0, 1, 0);
+            direction.Normalize();
         }
        
         public void Update(GameTime gameTime)
@@ -82,36 +69,49 @@ namespace Blocky.Entities
                 position -= Vector3.Cross(upVector, direction) * speed;
             }
 
-            var currentMouseState = Mouse.GetState();
 
-            RotationStates.X = currentMouseState.X - mouseState.X;
-            RotationStates.Y = currentMouseState.Y - mouseState.Y;
+            // Rotation in the world
+            direction = Vector3.Transform(direction, Matrix.CreateFromAxisAngle(upVector, (-MathHelper.PiOver4 / 150) * (Mouse.GetState().X - mouseState.X)));
 
-            if (RotationStates.Y < -0.5)
-            {
-                anglevertical += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            else if(RotationStates.Y > 0.5f)
-            {
-                anglevertical -= (float) gameTime.ElapsedGameTime.TotalSeconds;
-            }
 
-            if (RotationStates.X < -0.5f)
-            {
-                angleZ += (float)gameTime.ElapsedGameTime.TotalSeconds * Math.Abs(RotationStates.X)/25;
-            }
-            else if (RotationStates.X > 0.5f)
-            {
-                angleZ -= (float) gameTime.ElapsedGameTime.TotalSeconds*Math.Abs(RotationStates.X)/25;
-            }
+            direction = Vector3.Transform(direction, Matrix.CreateFromAxisAngle(Vector3.Cross(upVector, direction), (MathHelper.PiOver4 / 100) * (Mouse.GetState().Y - mouseState.Y)));
+            upVector = Vector3.Transform(upVector, Matrix.CreateFromAxisAngle(Vector3.Cross(upVector, direction), (MathHelper.PiOver4 / 100) * (Mouse.GetState().Y - mouseState.Y)));
 
-            var rotationMatrix = Matrix.CreateRotationZ(angleZ);
-            var forwardVector = Vector3.Transform(changeVector, rotationMatrix * 2);
-            
-            position += forwardVector;
-            
-            Mouse.SetPosition(graphicsDevice.Viewport.Width/2, graphicsDevice.Viewport.Height/2);
+            // Reset prevMouseState
             mouseState = Mouse.GetState();
+
+            ViewMatrix = Matrix.CreateLookAt(position, position + direction, upVector);
+
+            //var currentMouseState = Mouse.GetState();
+
+            //RotationStates.X = currentMouseState.X - mouseState.X;
+            //RotationStates.Y = currentMouseState.Y - mouseState.Y;
+
+            //if (RotationStates.Y < -0.5)
+            //{
+            //    anglevertical += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //}
+            //else if(RotationStates.Y > 0.5f)
+            //{
+            //    anglevertical -= (float) gameTime.ElapsedGameTime.TotalSeconds;
+            //}
+
+            //if (RotationStates.X < -0.5f)
+            //{
+            //    angleZ += (float)gameTime.ElapsedGameTime.TotalSeconds * Math.Abs(RotationStates.X)/25;
+            //}
+            //else if (RotationStates.X > 0.5f)
+            //{
+            //    angleZ -= (float) gameTime.ElapsedGameTime.TotalSeconds*Math.Abs(RotationStates.X)/25;
+            //}
+
+            //var rotationMatrix = Matrix.CreateRotationZ(angleZ);
+            //var forwardVector = Vector3.Transform(changeVector, rotationMatrix * 2);
+
+            //position += forwardVector;
+
+            //Mouse.SetPosition(graphicsDevice.Viewport.Width/2, graphicsDevice.Viewport.Height/2);
+            //mouseState = Mouse.GetState();
         }
         
     }

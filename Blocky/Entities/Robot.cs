@@ -22,7 +22,7 @@
             angle += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        public void Draw(Camera camera)
+        public void Draw(BaseCamera camera)
         {
             foreach (var mesh in model.Meshes)
             {
@@ -31,8 +31,8 @@
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
 
-                    effect.World = GetWorldMatrix();
-                    effect.View = camera.ViewMatrix;
+                    effect.World = Matrix.CreateWorld(new Vector3(0, 1, 0), Vector3.Forward, Vector3.Up);
+                    effect.View = camera.ViewSettings.ViewMatrix;
                     effect.Projection = camera.ProjectionMatrix;
                 }
 
@@ -47,10 +47,10 @@
 
             // this matrix moves the model "out" from the origin
             Matrix translationMatrix = Matrix.CreateTranslation(
-                circleRadius, 0, heightOffGround);
+                circleRadius, heightOffGround, 0);
 
             // this matrix rotates everything around the origin
-            Matrix rotationMatrix = Matrix.CreateRotationZ(angle);
+            Matrix rotationMatrix = Matrix.CreateRotationY(angle);
 
             // We combine the two to have the model move in a circle:
             Matrix combined = translationMatrix * rotationMatrix;
