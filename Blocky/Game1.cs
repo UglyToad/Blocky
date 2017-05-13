@@ -71,7 +71,12 @@
 
             // New camera code
             camera = new FirstPersonCamera(graphics.GraphicsDevice, 
-                new ViewMatrixSettings(new Vector3(0, 3, -10), Vector3.Up, Vector3.Forward));
+                new ViewMatrixSettings(new Vector3(0, 3, 10), Vector3.Up, Vector3.Forward));
+
+            IsMouseVisible = true;
+            Mouse.SetPosition(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
+
+            previousState = Mouse.GetState();
 
             base.Initialize();
         }
@@ -83,6 +88,7 @@
             font = Content.Load<SpriteFont>("Courier New");
         }
 
+        private MouseState previousState;
         protected override void Update(GameTime gameTime)
         {
             robot.Update(gameTime);
@@ -108,9 +114,14 @@
                 changeVector.X += 1;
             }
 
-            camera.Update(changeVector, 0, 0);
+            var currentState = Mouse.GetState();
+            var leftRightRotation = -(currentState.X - previousState.X);
+                 
+
+            camera.Update(changeVector, leftRightRotation, 0);
 
             //camera.Update(gameTime);
+            previousState = currentState;
             base.Update(gameTime);
         }
 

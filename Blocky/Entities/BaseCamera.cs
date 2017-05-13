@@ -35,7 +35,7 @@
         private float leftRightRotation;
         private float upDownRotation;
 
-        private float rotationSpeed = 0.05f;
+        private float rotationSpeed = 0.005f;
         private float speed = 1f;
 
         public FirstPersonCamera(GraphicsDevice graphicsDevice, ViewMatrixSettings viewMatrixSettings) : base(graphicsDevice, viewMatrixSettings)
@@ -53,7 +53,7 @@
 
             Vector3 transformed = Vector3.Transform(cameraReference, rotationMatrix);
 
-            this.ViewSettings.Position += translation*speed;
+            this.ViewSettings.Position += Vector3.Transform(translation, rotationMatrix)*speed;
             this.ViewSettings.Target = transformed + this.ViewSettings.Position;
         }
     }
