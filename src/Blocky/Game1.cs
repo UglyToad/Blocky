@@ -82,6 +82,7 @@
             IsMouseVisible = true;
             Mouse.SetPosition(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
 
+            block = new Block(GraphicsDevice);
 
             base.Initialize();
         }
@@ -149,12 +150,12 @@
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
-            DrawMakeCube();
-            //DrawGround();
+            //DrawMakeCube();
+            DrawGround();
 
             // New camera code
-            //robot.Draw(camera);
-           // block.Draw(camera);
+            robot.Draw(camera);
+            block.Draw(camera);
 
             base.Draw(gameTime);
         }

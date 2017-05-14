@@ -1,6 +1,5 @@
 ﻿namespace Blocky.Entities
 {
-    using System;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
 
@@ -9,18 +8,20 @@
         private readonly GraphicsDevice graphicsDevice;
         private readonly BasicEffect effect;
 
-        private readonly VertexPositionNormalTexture[] vertices;
+        private readonly VertexBuffer buffer;
 
 
         public Block(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
-            //vertices = CubeFactory.MakeCube();
+            var vertices = CubeFactory.GetCube(1);
+            buffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionColor), vertices.Length, BufferUsage.WriteOnly);
+
+            buffer.SetData(vertices);
 
             effect = new BasicEffect(graphicsDevice)
             {
-                World = Matrix.Identity,
-                TextureEnabled = true
+                World = Matrix.Identity
             };
         }
 
@@ -28,11 +29,14 @@
         {
             effect.Projection = camera.ProjectionMatrix;
             effect.View = camera.ViewSettings.ViewMatrix;
+            effect.VertexColorEnabled = true;
+
+            graphicsDevice.SetVertexBuffer(buffer);
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 12);
+                graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 12);
             }
         }
     }
