@@ -1,5 +1,6 @@
 ﻿namespace Blocky
 {
+    using System;
     using Entities;
     using Environment;
     using Microsoft.Xna.Framework;
@@ -18,15 +19,8 @@
     public class Game1 : Game
     {
         private readonly GraphicsDeviceManager graphics;
-        
-        private VertexPositionNormalTexture[] floorVertices;
+
         private Terrain terrain;
-        private Block block;
-
-        private BasicEffect effect;
-        private BasicEffect cubeEffect;
-
-        private Texture2D checkerboardTexture;
 
         private SpriteFont font;
         private SpriteBatch fontBatch;
@@ -50,50 +44,32 @@
 
         protected override void Initialize()
         {
-            floorVertices = new VertexPositionNormalTexture[6];
-
-            floorVertices[0].Position = new Vector3(-20, -1, 20);
-            floorVertices[1].Position = new Vector3(-20, -1, -20);
-            floorVertices[2].Position = new Vector3(20, -1, 20);
-            floorVertices[3].Position = floorVertices[1].Position;
-            floorVertices[4].Position = new Vector3(20, -1, -20);
-            floorVertices[5].Position = floorVertices[2].Position;
-
-            int repetitions = 20;
-
-            floorVertices[0].TextureCoordinate = new Vector2(0, 0);
-            floorVertices[1].TextureCoordinate = new Vector2(0, repetitions);
-            floorVertices[2].TextureCoordinate = new Vector2(repetitions, 0);
-
-            floorVertices[3].TextureCoordinate = floorVertices[1].TextureCoordinate;
-            floorVertices[4].TextureCoordinate = new Vector2(repetitions, repetitions);
-            floorVertices[5].TextureCoordinate = floorVertices[2].TextureCoordinate;
-        
-            effect = new BasicEffect(graphics.GraphicsDevice);
-            cubeEffect = new BasicEffect(graphics.GraphicsDevice);
-            
             robot = new Robot();
             robot.Initialize(Content);
 
             // New camera code
-            camera = new FirstPersonCamera(graphics.GraphicsDevice, 
+            camera = new FirstPersonCamera(graphics.GraphicsDevice,
                 new ViewMatrixSettings(new Vector3(0, 3, 10), Vector3.Up, Vector3.Forward));
 
             IsMouseVisible = true;
-            Mouse.SetPosition(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
-
-            block = new Block(GraphicsDevice, 0, 5, 0);
+            Mouse.SetPosition(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2);
 
             terrain = new Terrain();
 
+            Random random = new Random();
             for (int x = -20; x < 20; x++)
             {
                 for (int z = -20; z < 20; z++)
                 {
                     terrain.AddBlockAt(new IntPoint3D(x, 0, z), GraphicsDevice);
+
+                    if (random.Next(3) == 0)
+                    {
+                        terrain.AddBlockAt(new IntPoint3D(x, 1, z), GraphicsDevice);
+                    }
                 }
             }
-            
+
             base.Initialize();
         }
 
@@ -101,7 +77,6 @@
         {
             previousState = Mouse.GetState();
             fontBatch = new SpriteBatch(graphics.GraphicsDevice);
-            checkerboardTexture = Content.Load<Texture2D>("checkerboard");
             font = Content.Load<SpriteFont>("Courier New");
         }
 
@@ -146,13 +121,13 @@
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
-            
+
             fontBatch.Begin();
             // 2d drawing
             string output = "hi";// camera.RotationStates.X.ToString();
-           
+
             fontBatch.DrawString(font, output, new Vector2(20, 20), Color.LightGreen);
-             
+
             fontBatch.End();
 
             // reset rendering for 3d
@@ -160,38 +135,11 @@
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
-            //DrawMakeCube();
-            DrawGround();
-
             // New camera code
             robot.Draw(camera);
-            block.Draw(camera);
             terrain.Draw(camera);
 
             base.Draw(gameTime);
-        }
-        
-        private void DrawGround()
-        {
-            // New camera code
-            effect.View = camera.ViewSettings.ViewMatrix;
-            effect.Projection = camera.ProjectionMatrix;
-            effect.World = Matrix.Identity;
-
-
-            effect.TextureEnabled = true;
-            effect.Texture = checkerboardTexture;
-
-            foreach (var pass in effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-
-                graphics.GraphicsDevice.DrawUserPrimitives(
-                            PrimitiveType.TriangleList,
-                    floorVertices,
-                    0,
-                    2);
-            }
         }
     }
 }
