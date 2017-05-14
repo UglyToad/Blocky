@@ -5,6 +5,7 @@
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
+    using Util;
 
     /*
      *  X, Y, Z
@@ -85,12 +86,14 @@
 
             terrain = new Terrain();
 
-            terrain.AddBlockAt(new Vector3(1, 0, 0), GraphicsDevice);
-            terrain.AddBlockAt(new Vector3(1, 1, 0), GraphicsDevice);
-            terrain.AddBlockAt(new Vector3(0, 0, 1), GraphicsDevice);
-            terrain.AddBlockAt(new Vector3(0, 0, 2), GraphicsDevice);
-            terrain.AddBlockAt(new Vector3(1, 0, 3), GraphicsDevice);
-
+            for (int x = -20; x < 20; x++)
+            {
+                for (int z = -20; z < 20; z++)
+                {
+                    terrain.AddBlockAt(new IntPoint3D(x, 0, z), GraphicsDevice);
+                }
+            }
+            
             base.Initialize();
         }
 
