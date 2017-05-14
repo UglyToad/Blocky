@@ -6,7 +6,7 @@
 
     public static class CubeFactory
     {
-        public static VertexPositionColor[] GetCube(int size)
+        public static VertexPositionColor[] GetCube(int size, int x, int y, int z)
         {
             const float ninetyDegrees = -(float) Math.PI/2f;
 
@@ -30,15 +30,16 @@
             var rotateZNegative90Degrees = Matrix.CreateRotationZ(-ninetyDegrees);
 
             var offset = 0;
+            var centre = new Vector3(x, y, z);
 
             // Base
             for (var i = 0; i < 3; i++)
             {
                 // The generated plane faces into the cube so we flip it and move it down from the origin.
-                result[i].Position = Vector3.Transform(face[i], rotateX180Degrees) - (Vector3.UnitY * size);
+                result[i].Position = centre + Vector3.Transform(face[i], rotateX180Degrees) - (Vector3.UnitY * size);
                 result[i].Color = Color.ForestGreen;
 
-                result[i + 3].Position = Vector3.Transform(face[i + 3], rotateX180Degrees) - (Vector3.UnitY * size);
+                result[i + 3].Position = centre + Vector3.Transform(face[i + 3], rotateX180Degrees) - (Vector3.UnitY * size);
                 result[i + 3].Color = Color.ForestGreen;
             }
 
@@ -48,10 +49,10 @@
             for (var i = 0; i < 3; i++)
             {
                 // Move the plane up from the origin.
-                result[i + offset].Position = face[i] + (Vector3.UnitY * size);
+                result[i + offset].Position = centre + face[i] + (Vector3.UnitY * size);
                 result[i + offset].Color = Color.BlanchedAlmond;
 
-                result[i + offset + 3].Position = face[i + 3] + (Vector3.UnitY * size);
+                result[i + offset + 3].Position = centre + face[i + 3] + (Vector3.UnitY * size);
                 result[i + offset + 3].Color = Color.BlanchedAlmond;
             }
 
@@ -60,10 +61,10 @@
             // front
             for (var i = 0; i < 3; i++)
             {
-                result[i + offset].Position = Vector3.Transform(face[i], rotateX90Degrees) - Vector3.UnitZ * size;
+                result[i + offset].Position = centre + Vector3.Transform(face[i], rotateX90Degrees) - Vector3.UnitZ * size;
                 result[i + offset].Color = Color.CadetBlue;
 
-                result[i + offset + 3].Position = Vector3.Transform(face[i + 3], rotateX90Degrees) - Vector3.UnitZ * size;
+                result[i + offset + 3].Position = centre + Vector3.Transform(face[i + 3], rotateX90Degrees) - Vector3.UnitZ * size;
                 result[i + offset + 3].Color = Color.CadetBlue;
             }
 
@@ -72,10 +73,10 @@
             // back
             for (var i = 0; i < 3; i++)
             {
-                result[i + offset].Position = Vector3.Transform(face[i], rotateXNegative90Degrees) + Vector3.UnitZ * size;
+                result[i + offset].Position = centre + Vector3.Transform(face[i], rotateXNegative90Degrees) + Vector3.UnitZ * size;
                 result[i + offset].Color = Color.Yellow;
                 
-                result[i + offset + 3].Position = Vector3.Transform(face[i + 3], rotateXNegative90Degrees) + Vector3.UnitZ * size;
+                result[i + offset + 3].Position = centre + Vector3.Transform(face[i + 3], rotateXNegative90Degrees) + Vector3.UnitZ * size;
                 result[i + offset + 3].Color = Color.Yellow;
             }
 
@@ -84,10 +85,10 @@
             // right
             for (var i = 0; i < 3; i++)
             {
-                result[i + offset].Position = Vector3.Transform(face[i], rotateZ90Degrees) + Vector3.UnitX * size;
+                result[i + offset].Position = centre + Vector3.Transform(face[i], rotateZ90Degrees) + Vector3.UnitX * size;
                 result[i + offset].Color = Color.Crimson;
 
-                result[i + offset + 3].Position = Vector3.Transform(face[i + 3], rotateZ90Degrees) + Vector3.UnitX * size;
+                result[i + offset + 3].Position = centre + Vector3.Transform(face[i + 3], rotateZ90Degrees) + Vector3.UnitX * size;
                 result[i + offset + 3].Color = Color.Crimson;
             }
 
@@ -96,10 +97,10 @@
             // left
             for (var i = 0; i < 3; i++)
             {
-                result[i + offset].Position = Vector3.Transform(face[i], rotateZNegative90Degrees) - Vector3.UnitX * size;
+                result[i + offset].Position = centre + Vector3.Transform(face[i], rotateZNegative90Degrees) - Vector3.UnitX * size;
                 result[i + offset].Color = Color.GreenYellow;
 
-                result[i + offset + 3].Position = Vector3.Transform(face[i + 3], rotateZNegative90Degrees) - Vector3.UnitX * size;
+                result[i + offset + 3].Position = centre + Vector3.Transform(face[i + 3], rotateZNegative90Degrees) - Vector3.UnitX * size;
                 result[i + offset + 3].Color = Color.GreenYellow;
 
             }

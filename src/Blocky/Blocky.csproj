@@ -49,6 +49,7 @@
     <Compile Include="Entities\FirstPersonCamera.cs" />
     <Compile Include="Entities\Robot.cs" />
     <Compile Include="Entities\ViewMatrixSettings.cs" />
+    <Compile Include="Environment\Terrain.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

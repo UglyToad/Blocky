@@ -1,6 +1,7 @@
 ﻿namespace Blocky
 {
     using Entities;
+    using Environment;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
@@ -18,7 +19,7 @@
         private readonly GraphicsDeviceManager graphics;
         
         private VertexPositionNormalTexture[] floorVertices;
-        private VertexPositionColor[] makeCubeVertices;
+        private Terrain terrain;
         private Block block;
 
         private BasicEffect effect;
@@ -50,11 +51,11 @@
         {
             floorVertices = new VertexPositionNormalTexture[6];
 
-            floorVertices[0].Position = new Vector3(-20,0, 20);
-            floorVertices[1].Position = new Vector3(-20, 0, -20);
-            floorVertices[2].Position = new Vector3(20, 0, 20);
+            floorVertices[0].Position = new Vector3(-20, -1, 20);
+            floorVertices[1].Position = new Vector3(-20, -1, -20);
+            floorVertices[2].Position = new Vector3(20, -1, 20);
             floorVertices[3].Position = floorVertices[1].Position;
-            floorVertices[4].Position = new Vector3(20, 0, -20);
+            floorVertices[4].Position = new Vector3(20, -1, -20);
             floorVertices[5].Position = floorVertices[2].Position;
 
             int repetitions = 20;
@@ -69,11 +70,9 @@
         
             effect = new BasicEffect(graphics.GraphicsDevice);
             cubeEffect = new BasicEffect(graphics.GraphicsDevice);
-
-            makeCubeVertices = CubeFactory.GetCube(3);
+            
             robot = new Robot();
             robot.Initialize(Content);
-            block = new Block(graphics.GraphicsDevice);
 
             // New camera code
             camera = new FirstPersonCamera(graphics.GraphicsDevice, 
@@ -82,7 +81,15 @@
             IsMouseVisible = true;
             Mouse.SetPosition(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
 
-            block = new Block(GraphicsDevice);
+            block = new Block(GraphicsDevice, 0, 5, 0);
+
+            terrain = new Terrain();
+
+            terrain.AddBlockAt(new Vector3(1, 0, 0), GraphicsDevice);
+            terrain.AddBlockAt(new Vector3(1, 1, 0), GraphicsDevice);
+            terrain.AddBlockAt(new Vector3(0, 0, 1), GraphicsDevice);
+            terrain.AddBlockAt(new Vector3(0, 0, 2), GraphicsDevice);
+            terrain.AddBlockAt(new Vector3(1, 0, 3), GraphicsDevice);
 
             base.Initialize();
         }
@@ -156,25 +163,11 @@
             // New camera code
             robot.Draw(camera);
             block.Draw(camera);
+            terrain.Draw(camera);
 
             base.Draw(gameTime);
         }
-
-        private void DrawMakeCube()
-        {
-            cubeEffect.View = camera.ViewSettings.ViewMatrix;
-            cubeEffect.Projection = camera.ProjectionMatrix;
-            cubeEffect.World = Matrix.Identity;
-            cubeEffect.VertexColorEnabled = true;
-            
-            foreach (var pass in cubeEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-
-                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, makeCubeVertices, 0, 12);
-            }
-        }
-
+        
         private void DrawGround()
         {
             // New camera code

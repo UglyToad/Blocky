@@ -11,10 +11,10 @@
         private readonly VertexBuffer buffer;
 
 
-        public Block(GraphicsDevice graphicsDevice)
+        public Block(GraphicsDevice graphicsDevice, int x, int y, int z)
         {
             this.graphicsDevice = graphicsDevice;
-            var vertices = CubeFactory.GetCube(1);
+            var vertices = CubeFactory.GetCube(1, x, y, z);
             buffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionColor), vertices.Length, BufferUsage.WriteOnly);
 
             buffer.SetData(vertices);
