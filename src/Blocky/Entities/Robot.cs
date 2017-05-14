@@ -31,7 +31,7 @@
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
 
-                    effect.World = Matrix.CreateWorld(new Vector3(0, 1, 0), Vector3.Forward, Vector3.Up);
+                    effect.World = Matrix.CreateWorld(new Vector3(0, 1, 5), Vector3.Forward, Vector3.Up);
                     effect.View = camera.ViewSettings.ViewMatrix;
                     effect.Projection = camera.ProjectionMatrix;
                 }

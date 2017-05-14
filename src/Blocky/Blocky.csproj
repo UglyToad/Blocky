@@ -44,7 +44,9 @@
   <ItemGroup>
     <Compile Include="Abstractions\IContentManager.cs" />
     <Compile Include="Entities\BaseCamera.cs" />
-    <Compile Include="Entities\Camera.cs" />
+    <Compile Include="Entities\Block.cs" />
+    <Compile Include="Entities\CubeFactory.cs" />
+    <Compile Include="Entities\FirstPersonCamera.cs" />
     <Compile Include="Entities\Robot.cs" />
     <Compile Include="Entities\ViewMatrixSettings.cs" />
     <Compile Include="Game1.cs" />

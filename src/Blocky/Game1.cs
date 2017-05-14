@@ -17,9 +17,12 @@
     {
         private readonly GraphicsDeviceManager graphics;
         
-        private VertexPositionNormalTexture[] floorVerts2;
+        private VertexPositionNormalTexture[] floorVertices;
+        private VertexPositionColor[] makeCubeVertices;
+        private Block block;
 
         private BasicEffect effect;
+        private BasicEffect cubeEffect;
 
         private Texture2D checkerboardTexture;
 
@@ -45,29 +48,32 @@
 
         protected override void Initialize()
         {
-            floorVerts2 = new VertexPositionNormalTexture[6];
+            floorVertices = new VertexPositionNormalTexture[6];
 
-            floorVerts2[0].Position = new Vector3(-20,0, 20);
-            floorVerts2[1].Position = new Vector3(-20, 0, -20);
-            floorVerts2[2].Position = new Vector3(20, 0, 20);
-            floorVerts2[3].Position = floorVerts2[1].Position;
-            floorVerts2[4].Position = new Vector3(20, 0, -20);
-            floorVerts2[5].Position = floorVerts2[2].Position;
+            floorVertices[0].Position = new Vector3(-20,0, 20);
+            floorVertices[1].Position = new Vector3(-20, 0, -20);
+            floorVertices[2].Position = new Vector3(20, 0, 20);
+            floorVertices[3].Position = floorVertices[1].Position;
+            floorVertices[4].Position = new Vector3(20, 0, -20);
+            floorVertices[5].Position = floorVertices[2].Position;
 
             int repetitions = 20;
 
-            floorVerts2[0].TextureCoordinate = new Vector2(0, 0);
-            floorVerts2[1].TextureCoordinate = new Vector2(0, repetitions);
-            floorVerts2[2].TextureCoordinate = new Vector2(repetitions, 0);
+            floorVertices[0].TextureCoordinate = new Vector2(0, 0);
+            floorVertices[1].TextureCoordinate = new Vector2(0, repetitions);
+            floorVertices[2].TextureCoordinate = new Vector2(repetitions, 0);
 
-            floorVerts2[3].TextureCoordinate = floorVerts2[1].TextureCoordinate;
-            floorVerts2[4].TextureCoordinate = new Vector2(repetitions, repetitions);
-            floorVerts2[5].TextureCoordinate = floorVerts2[2].TextureCoordinate;
+            floorVertices[3].TextureCoordinate = floorVertices[1].TextureCoordinate;
+            floorVertices[4].TextureCoordinate = new Vector2(repetitions, repetitions);
+            floorVertices[5].TextureCoordinate = floorVertices[2].TextureCoordinate;
         
             effect = new BasicEffect(graphics.GraphicsDevice);
+            cubeEffect = new BasicEffect(graphics.GraphicsDevice);
 
+            makeCubeVertices = CubeFactory.GetCube(3);
             robot = new Robot();
             robot.Initialize(Content);
+            block = new Block(graphics.GraphicsDevice);
 
             // New camera code
             camera = new FirstPersonCamera(graphics.GraphicsDevice, 
@@ -116,9 +122,9 @@
 
             var currentState = Mouse.GetState();
             var leftRightRotation = -(currentState.X - previousState.X);
-                 
+            var upDownRotation = -(currentState.Y - previousState.Y);
 
-            camera.Update(changeVector, leftRightRotation, 0);
+            camera.Update(changeVector, leftRightRotation, upDownRotation);
 
             //camera.Update(gameTime);
             previousState = currentState;
@@ -142,12 +148,30 @@
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            DrawGround();
+
+            DrawMakeCube();
+            //DrawGround();
 
             // New camera code
-            robot.Draw(camera);
+            //robot.Draw(camera);
+           // block.Draw(camera);
 
             base.Draw(gameTime);
+        }
+
+        private void DrawMakeCube()
+        {
+            cubeEffect.View = camera.ViewSettings.ViewMatrix;
+            cubeEffect.Projection = camera.ProjectionMatrix;
+            cubeEffect.World = Matrix.Identity;
+            cubeEffect.VertexColorEnabled = true;
+            
+            foreach (var pass in cubeEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+
+                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, makeCubeVertices, 0, 12);
+            }
         }
 
         private void DrawGround()
@@ -167,7 +191,7 @@
 
                 graphics.GraphicsDevice.DrawUserPrimitives(
                             PrimitiveType.TriangleList,
-                    floorVerts2,
+                    floorVertices,
                     0,
                     2);
             }
