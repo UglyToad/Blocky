@@ -15,7 +15,7 @@
         public Block(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
-            vertices = CubeFactory.MakeCube();
+            //vertices = CubeFactory.MakeCube();
 
             effect = new BasicEffect(graphicsDevice)
             {
