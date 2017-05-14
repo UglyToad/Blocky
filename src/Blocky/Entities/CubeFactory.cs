@@ -8,7 +8,7 @@
     {
         public static VertexPositionColor[] GetCube(int size)
         {
-            var ninetyDegrees = -(float) Math.PI/2f;
+            const float ninetyDegrees = -(float) Math.PI/2f;
 
             // Points which form the base of the cube.
             var face = new []
@@ -57,6 +57,7 @@
 
             offset += 6;
 
+            // front
             for (var i = 0; i < 3; i++)
             {
                 result[i + offset].Position = Vector3.Transform(face[i], rotateX90Degrees) - Vector3.UnitZ * size;
@@ -68,6 +69,7 @@
 
             offset += 6;
 
+            // back
             for (var i = 0; i < 3; i++)
             {
                 result[i + offset].Position = Vector3.Transform(face[i], rotateXNegative90Degrees) + Vector3.UnitZ * size;
@@ -79,6 +81,7 @@
 
             offset += 6;
 
+            // right
             for (var i = 0; i < 3; i++)
             {
                 result[i + offset].Position = Vector3.Transform(face[i], rotateZ90Degrees) + Vector3.UnitX * size;
@@ -90,6 +93,7 @@
 
             offset += 6;
 
+            // left
             for (var i = 0; i < 3; i++)
             {
                 result[i + offset].Position = Vector3.Transform(face[i], rotateZNegative90Degrees) - Vector3.UnitX * size;
@@ -102,6 +106,5 @@
 
             return result;
         }
-
     }
 }
