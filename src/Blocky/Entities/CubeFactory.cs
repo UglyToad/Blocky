@@ -50,10 +50,10 @@
             {
                 // Move the plane up from the origin.
                 result[i + offset].Position = centre + face[i] + (Vector3.UnitY * size);
-                result[i + offset].Color = Color.BlanchedAlmond;
+                result[i + offset].Color = Color.DarkGreen;
 
                 result[i + offset + 3].Position = centre + face[i + 3] + (Vector3.UnitY * size);
-                result[i + offset + 3].Color = Color.BlanchedAlmond;
+                result[i + offset + 3].Color = Color.DarkGreen;
             }
 
             offset += 6;

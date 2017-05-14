@@ -1,5 +1,6 @@
-﻿namespace Blocky.Entities
+﻿namespace Blocky.Environment
 {
+    using Entities;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
 

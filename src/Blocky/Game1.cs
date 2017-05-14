@@ -28,7 +28,7 @@
         // New camera code
         private FirstPersonCamera camera;
 
-        private Robot robot;
+        private Player player;
 
         public Game1()
         {
@@ -38,18 +38,17 @@
                 PreferredBackBufferHeight = 960
             };
 
-
             Content.RootDirectory = "Content";
         }
 
         protected override void Initialize()
         {
-            robot = new Robot();
-            robot.Initialize(Content);
+            player = new Player(this, new Vector3(0, 2, 0));
+            player.Initialize();
 
             // New camera code
             camera = new FirstPersonCamera(graphics.GraphicsDevice,
-                new ViewMatrixSettings(new Vector3(0, 3, 10), Vector3.Up, Vector3.Forward));
+                new ViewMatrixSettings(new Vector3(0, 5, 0), Vector3.Up, Vector3.Forward));
 
             IsMouseVisible = true;
             Mouse.SetPosition(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2);
@@ -61,11 +60,11 @@
             {
                 for (int z = -20; z < 20; z++)
                 {
-                    terrain.AddBlockAt(new IntPoint3D(x, 0, z), GraphicsDevice);
+                    terrain.AddBlockAt(new IntPoint3D(x, -1, z), GraphicsDevice);
 
                     if (random.Next(3) == 0)
                     {
-                        terrain.AddBlockAt(new IntPoint3D(x, 1, z), GraphicsDevice);
+                        terrain.AddBlockAt(new IntPoint3D(x, 0, z), GraphicsDevice);
                     }
                 }
             }
@@ -83,10 +82,6 @@
         private MouseState previousState;
         protected override void Update(GameTime gameTime)
         {
-            robot.Update(gameTime);
-            // New camera code
-
-
             var state = Keyboard.GetState();
 
             var changeVector = new Vector3();
@@ -110,6 +105,7 @@
             var leftRightRotation = -(currentState.X - previousState.X);
             var upDownRotation = -(currentState.Y - previousState.Y);
 
+            player.Update(gameTime, changeVector, leftRightRotation);
             camera.Update(changeVector, leftRightRotation, upDownRotation);
 
             //camera.Update(gameTime);
@@ -136,8 +132,8 @@
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
             // New camera code
-            robot.Draw(camera);
             terrain.Draw(camera);
+            player.Draw(camera);
 
             base.Draw(gameTime);
         }

@@ -29,13 +29,12 @@ namespace Blocky.Entities
             leftRightRotation += leftRight*RotationSpeed;
             upDownRotation += upDown*RotationSpeed;
 
-            var rotationMatrix = Matrix.CreateRotationX(upDownRotation)*Matrix.CreateRotationY(leftRightRotation);
+            var rotationMatrix = Matrix.CreateRotationY(leftRightRotation);
+            var rotationMatrix2 = Matrix.CreateRotationX(upDownRotation) * Matrix.CreateRotationY(leftRightRotation);
 
-            Vector3 transformed = Vector3.Transform(cameraReference, rotationMatrix);
-
-            var originalY = ViewSettings.Position.Y;
+            Vector3 transformed = Vector3.Transform(cameraReference, rotationMatrix2);
+            
             ViewSettings.Position += Vector3.Transform(translation, rotationMatrix)*MovementSpeed;
-            //ViewSettings.Position = new Vector3(ViewSettings.Position.X, originalY, ViewSettings.Position.Z);
 
             ViewSettings.Target = transformed + ViewSettings.Position;
         }
