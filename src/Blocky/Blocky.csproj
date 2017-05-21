@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ThreeDimensionalList.cs" />
     <Compile Include="Util\IntPoint3D.cs" />
+    <Compile Include="Util\WorldToBlockSpaceConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

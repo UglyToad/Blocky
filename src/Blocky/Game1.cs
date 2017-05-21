@@ -1,6 +1,7 @@
 ﻿namespace Blocky
 {
     using System;
+    using System.Reflection.Emit;
     using Entities;
     using Environment;
     using Microsoft.Xna.Framework;
@@ -108,11 +109,37 @@
             player.Update(gameTime, changeVector, leftRightRotation);
             camera.Update(changeVector, leftRightRotation, upDownRotation);
 
+            if (currentState.LeftButton == ButtonState.Pressed)
+            {
+                output =
+                    $"X: {camera.ViewSettings.ViewMatrix.Rotation.X} Y: {camera.ViewSettings.ViewMatrix.Rotation.Y} Z: {camera.ViewSettings.ViewMatrix.Rotation.Z}" +
+                    $"\r\nx:{camera.ViewSettings.Position.X} Y: {camera.ViewSettings.Position.Y} Z: {camera.ViewSettings.Position.Z}";
+
+
+                var near = GraphicsDevice.Viewport.Unproject(new Vector3(currentState.X, currentState.Y, 0f),
+                    camera.ProjectionMatrix,
+                    camera.ViewSettings.ViewMatrix, Matrix.Identity);
+                var far = GraphicsDevice.Viewport.Unproject(new Vector3(currentState.X, currentState.Y, 1f),
+                    camera.ProjectionMatrix,
+                    camera.ViewSettings.ViewMatrix, Matrix.Identity);
+                var ray = new Ray(near, Vector3.Normalize(far - near));
+
+                var groundPlane = new Plane(new Vector3(0, 1, 0), 0);
+
+                float? result;
+                ray.Intersects(ref groundPlane, out result);
+                if (result != null)
+                {
+                    Vector3 worldPoint = ray.Position + ray.Direction * result.Value;
+                }
+            }
+
             //camera.Update(gameTime);
             previousState = currentState;
             base.Update(gameTime);
         }
 
+        private string output = string.Empty;
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -120,7 +147,6 @@
 
             fontBatch.Begin();
             // 2d drawing
-            string output = "hi";// camera.RotationStates.X.ToString();
 
             fontBatch.DrawString(font, output, new Vector2(20, 20), Color.LightGreen);
 
