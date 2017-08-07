@@ -3,11 +3,12 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using JetBrains.Annotations;
 
     public class ThreeDimensionalList<T> : IEnumerable<T> where T : class
     {
-        private readonly InfiniteList<InfiniteList<InfiniteList<T>>> content;
+        private readonly InfiniteCollection<InfiniteCollection<InfiniteCollection<T>>> content;
 
         [CanBeNull]
         public T this[int x, int y, int z]
@@ -26,7 +27,7 @@
 
                 if (xList == null)
                 {
-                    content[x] = new InfiniteList<InfiniteList<T>>();
+                    content[x] = new InfiniteCollection<InfiniteCollection<T>>();
                     xList = content[x];
                 }
 
@@ -34,7 +35,7 @@
 
                 if (yList == null)
                 {
-                    xList[y] = new InfiniteList<T>();
+                    xList[y] = new InfiniteCollection<T>();
                     yList = xList[y];
                 }
 
@@ -44,7 +45,7 @@
 
         public ThreeDimensionalList()
         {
-            content = new InfiniteList<InfiniteList<InfiniteList<T>>>();
+            content = new InfiniteCollection<InfiniteCollection<InfiniteCollection<T>>>();
         }
 
 
@@ -78,77 +79,46 @@
         }
     }
 
-    public class InfiniteList<T> : IEnumerable<T> where T : class
+    public class InfiniteCollection<T> : IEnumerable<T>
     {
         private readonly List<T> positive;
         private readonly List<T> negative;
 
-        [CanBeNull]
-        public T this[int index]
-        {
-            get
-            {
-                if (index >= positive.Count)
-                {
-                    return null;
-                }
-
-                if (index < 0 && Math.Abs(index) > negative.Count)
-                {
-                    return null;
-                }
-
-                if (index >= 0)
-                {
-                    return positive[index];
-                }
-
-                return negative[Math.Abs(index) - 1];
-            }
-            set
-            {
-                var list = index >= 0 ? positive : negative;
-                var targetIndex = index >= 0 ? index : Math.Abs(index) - 1;
-
-                PlaceItemAtIndex(list, targetIndex, value);
-            }
-        }
-
-        public InfiniteList()
+        public InfiniteCollection()
         {
             positive = new List<T>();
             negative = new List<T>();
         }
 
-        private void PlaceItemAtIndex(List<T> list, int index, T item)
+        public T this[int index]
         {
-            if (list.Count > index)
-            {
-                list[index] = item;
-                return;
-            }
+            get { return List(index).ElementAtOrDefault(Math.Abs(index)); }
+            set { Add(value, index); }
+        }
 
-            var missingCount = index - (list.Count - 1);
+    private List<T> List(int index) => index < 0 ? negative : positive;
+
+        private void Add(T item, int index)
+        {
+            var list = List(index);
+            var missingCount = Math.Abs(index) - (list.Count - 1);
+            if (missingCount > 0)
+            {
+                list.AddRange(Enumerable.Repeat(default(T), missingCount));
+            }
             
-            for (int i = 0; i < missingCount; i++)
-            {
-                list.Add(null);
-            }
-
-            list[index] = item;
+            list[Math.Abs(index)] = item;
+            return;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            if (negative.Count > 0)
+            for (var i = negative.Count - 1; i > 0; i--)
             {
-                for (int i = negative.Count - 1; i >= 0; i--)
-                {
-                    yield return negative[i];
-                }
+                yield return negative[i];
             }
 
-            for (int i = 0; i < positive.Count; i++)
+            for (var i = 0; i < positive.Count; i++)
             {
                 yield return positive[i];
             }
@@ -159,5 +129,6 @@
             return GetEnumerator();
         }
     }
+
 
 }
