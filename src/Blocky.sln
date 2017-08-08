@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blocky.Tests.Unit", "Blocky
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blocky.Tests.Integration", "Blocky.Tests.Integration\Blocky.Tests.Integration.csproj", "{E6E5E7F7-821E-482C-9AF9-1FD041B32577}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blocky.SandBox.Wpf", "Blocky.SandBox.Wpf\Blocky.SandBox.Wpf.csproj", "{C76C7359-FB6E-4DDC-96AE-1ACB4C508C97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E6E5E7F7-821E-482C-9AF9-1FD041B32577}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6E5E7F7-821E-482C-9AF9-1FD041B32577}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6E5E7F7-821E-482C-9AF9-1FD041B32577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C76C7359-FB6E-4DDC-96AE-1ACB4C508C97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C76C7359-FB6E-4DDC-96AE-1ACB4C508C97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C76C7359-FB6E-4DDC-96AE-1ACB4C508C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C76C7359-FB6E-4DDC-96AE-1ACB4C508C97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
