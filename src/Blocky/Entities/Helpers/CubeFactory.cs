@@ -73,31 +73,30 @@ namespace Blocky.Entities.Helpers
             { new IntPoint3D(0, 0, 1), Color.Yellow}
         };
 
-        public static VertexPositionColor[] GetCubeWithDefaultFaces(int size, Vector3 position)
+        public static VertexPositionColor[] GetCubeWithDefaultFaces(int size)
         {
-            return GetCube(size, position, IntPoint3D.GetNeighbourPositions());
+            return GetCube(size, IntPoint3D.GetNeighbourPositions());
         }
 
         /// <summary>
         /// Get cube vertices.
         /// </summary>
         /// <param name="size">Cube size</param>
-        /// <param name="position">Position</param>
         /// <param name="visibleFaces">Face vectors. Should be normalized!</param>
         /// <returns></returns>
-        public static VertexPositionColor[] GetCube(int size, Vector3 position, IntPoint3D[] visibleFaces)
+        public static VertexPositionColor[] GetCube(int size, IntPoint3D[] visibleFaces)
         {
             var result = new List<VertexPositionColor>();
 
             foreach (var visibleFace in visibleFaces)
             {
-                result.AddRange(GetFaceVerteces(visibleFace, size, position));
+                result.AddRange(GetFaceVerteces(visibleFace, size));
             }
 
             return result.ToArray();
         }
 
-        private static IEnumerable<VertexPositionColor> GetFaceVerteces(IntPoint3D faceVector, int scale, Vector3 position)
+        private static IEnumerable<VertexPositionColor> GetFaceVerteces(IntPoint3D faceVector, int scale)
         {
             var halfScale = scale / 2f;
 
@@ -105,8 +104,8 @@ namespace Blocky.Entities.Helpers
             {
                 var result = new VertexPositionColor()
                 {
-                    Position = position + (vector * halfScale),
-                    Color = Colors[faceVector]
+                    Position = (vector * halfScale),
+                    Color = Colors[faceVector]/*.Values.ToArray()[new Random().Next(6)]*/
                 };
 
                 yield return result;

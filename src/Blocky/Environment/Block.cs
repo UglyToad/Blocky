@@ -8,7 +8,7 @@ namespace Blocky.Environment
 {
     public class Block
     {
-        private const int BlockSize = 3;
+        private const int BlockSize = 2;
 
         private readonly GraphicsDevice graphicsDevice;
 
@@ -21,9 +21,9 @@ namespace Blocky.Environment
         {
             this.graphicsDevice = graphicsDevice;
 
-            Position = position.ToVector() * (BlockSize / 2f);
+            Position = position.ToVector() * BlockSize;
 
-            vertices = CubeFactory.GetCube(BlockSize, Position, IntPoint3D.GetNeighbourPositions());
+            vertices = CubeFactory.GetCube(BlockSize, IntPoint3D.GetNeighbourPositions());
 
             effect = new BasicEffect(graphicsDevice);
         }

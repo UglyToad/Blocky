@@ -16,7 +16,7 @@ namespace Blocky.Tests.Unit.Entities
             const int verticesInAFace = 6;
             const int facesInACube = 6;
 
-            var cube = CubeFactory.GetCubeWithDefaultFaces(BlockSize, new Vector3(0, 0, 0));
+            var cube = CubeFactory.GetCubeWithDefaultFaces(BlockSize);
 
             cube.Length.ShouldBe(verticesInAFace * facesInACube);
         }
@@ -30,7 +30,7 @@ namespace Blocky.Tests.Unit.Entities
         /// </summary>
         public void CubeAtOrigin()
         {
-            var cube = CubeFactory.GetCubeWithDefaultFaces(BlockSize, new Vector3(0, 0, 0));
+            var cube = CubeFactory.GetCubeWithDefaultFaces(BlockSize);
 
             const float halfSize = BlockSize / 2f;
 
@@ -38,19 +38,9 @@ namespace Blocky.Tests.Unit.Entities
                 new Vector3(halfSize, halfSize, halfSize), cube);
         }
 
-        public void CubeAtOffset()
-        {
-            var cube = CubeFactory.GetCubeWithDefaultFaces(BlockSize, new Vector3(1, 2, 0));
-
-            const float halfSize = BlockSize / 2f;
-
-            AssertCubeBounds(new Vector3(1- halfSize, 2- halfSize, -halfSize), 
-                new Vector3(1 + halfSize, 2 + halfSize, halfSize), cube);
-        }
-
         public void BlockSizesChangesCube()
         {
-            var cube = CubeFactory.GetCubeWithDefaultFaces(3, new Vector3(0, 0, 0));
+            var cube = CubeFactory.GetCubeWithDefaultFaces(3);
 
             AssertCubeBounds(new Vector3(-1.5f, -1.5f, -1.5f), 
                 new Vector3(1.5f, 1.5f, 1.5f), cube);
