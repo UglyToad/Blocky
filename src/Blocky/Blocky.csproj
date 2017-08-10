@@ -57,6 +57,7 @@
     <Compile Include="Environment\Logical\LogicalTerrain.cs" />
     <Compile Include="Environment\Terrain\ITerrain.cs" />
     <Compile Include="Environment\Terrain\Terrain.cs" />
+    <Compile Include="Environment\Terrain\TerrainGenerators\CubeTerrainGenerator.cs" />
     <Compile Include="Environment\Terrain\TerrainGenerators\HillBillyGenerator.cs" />
     <Compile Include="Environment\Terrain\TerrainGenerators\ITerrainGenerator.cs" />
     <Compile Include="Game1.cs" />

@@ -16,35 +16,30 @@ namespace Blocky.Util
 
                         var hasExposedFace = false;
 
-                        if (c1 != 0)
+                        if (c1 == 0 || c1 == data.Width - 1)
                         {
-                            hasExposedFace |= data[c1 - 1, c2, c3] != 0;
+                            yield return new IntPoint3D(c1, c3, c2);
+                            continue;
                         }
 
-                        if (c1 != data.Width - 1)
+                        if (c2 == 0 || c2 == data.Depth - 1)
                         {
-                            hasExposedFace |= data[c1 + 1, c2, c3] != 0;
+                            yield return new IntPoint3D(c1, c3, c2);
+                            continue;
                         }
 
-                        if (c2 != 0)
+                        if (c3 == 0 || c3 == data.Height - 1)
                         {
-                            hasExposedFace |= data[c1, c2 - 1, c3] != 0;
+                            yield return new IntPoint3D(c1, c3, c2);
+                            continue;
                         }
 
-                        if (c2 != data.Depth - 1)
-                        {
-                            hasExposedFace |= data[c1, c2 + 1, c3] != 0;
-                        }
-
-                        if (c3 != 0)
-                        {
-                            hasExposedFace |= data[c1, c2, c3 - 1] != 0;
-                        }
-
-                        if (c3 != data.Height - 1)
-                        {
-                            hasExposedFace |= data[c1, c2, c3 + 1] != 0;
-                        }
+                        hasExposedFace |= data[c1 - 1, c2, c3] == 0;
+                        hasExposedFace |= data[c1 + 1, c2, c3] == 0;
+                        hasExposedFace |= data[c1, c2 - 1, c3] == 0;
+                        hasExposedFace |= data[c1, c2 + 1, c3] == 0;
+                        hasExposedFace |= data[c1, c2, c3 - 1] == 0;
+                        hasExposedFace |= data[c1, c2, c3 + 1] == 0;
 
                         if (hasExposedFace)
                         {

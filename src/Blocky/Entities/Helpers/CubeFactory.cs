@@ -102,9 +102,9 @@ namespace Blocky.Entities.Helpers
 
             foreach (var vector in Faces[faceVector])
             {
-                var result = new VertexPositionColor()
+                var result = new VertexPositionColor
                 {
-                    Position = (vector * halfScale),
+                    Position = vector * halfScale,
                     Color = Colors[faceVector]/*.Values.ToArray()[new Random().Next(6)]*/
                 };
 

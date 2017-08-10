@@ -51,12 +51,12 @@ namespace Blocky
 
             // New camera code
             camera = new FirstPersonCamera(graphics.GraphicsDevice,
-                new ViewMatrixSettings(new Vector3(50, 50, -50), Vector3.Up, Vector3.Forward));
+                new ViewMatrixSettings(new Vector3(50, 100, 600), Vector3.Up, Vector3.Forward));
 
             IsMouseVisible = true;
             Mouse.SetPosition(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2);
 
-            var terrainGenerator = new HillBillyGenerator(100, 100, 50);
+            var terrainGenerator = new HillBillyGenerator(200, 200, 50);
 
             terrain = new Terrain(terrainGenerator, GraphicsDevice);
 
@@ -76,8 +76,6 @@ namespace Blocky
             var state = Keyboard.GetState();
 
             var changeVector = new Vector3();
-
-
 
             if (state.IsKeyDown(Keys.W))
                 changeVector.Z -= 1;
