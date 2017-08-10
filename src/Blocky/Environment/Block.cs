@@ -1,43 +1,42 @@
-﻿namespace Blocky.Environment
-{
-    using Entities;
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
+﻿using Blocky.Entities.Camera;
+using Blocky.Entities.Helpers;
+using Blocky.Util;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+namespace Blocky.Environment
+{
     public class Block
     {
+        private const int BlockSize = 3;
+
         private readonly GraphicsDevice graphicsDevice;
+
         private readonly BasicEffect effect;
+        private readonly VertexPositionColor[] vertices;
 
-        private readonly VertexBuffer buffer;
+        public Vector3 Position { get; }
 
-
-        public Block(GraphicsDevice graphicsDevice, int x, int y, int z)
+        public Block(GraphicsDevice graphicsDevice, IntPoint3D position)
         {
             this.graphicsDevice = graphicsDevice;
-            var vertices = CubeFactory.GetCube(1, x, y, z);
-            buffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionColor), vertices.Length, BufferUsage.WriteOnly);
 
-            buffer.SetData(vertices);
+            Position = position.ToVector() * (BlockSize / 2f);
 
-            effect = new BasicEffect(graphicsDevice)
-            {
-                World = Matrix.Identity
-            };
+            vertices = CubeFactory.GetCube(BlockSize, Position, IntPoint3D.GetNeighbourPositions());
+
+            effect = new BasicEffect(graphicsDevice);
         }
 
         public void Draw(BaseCamera camera)
         {
-            effect.Projection = camera.ProjectionMatrix;
-            effect.View = camera.ViewSettings.ViewMatrix;
-            effect.VertexColorEnabled = true;
-
-            graphicsDevice.SetVertexBuffer(buffer);
+            effect.InitializeDrawEffect(camera);
+            effect.World = Matrix.Identity * Matrix.CreateTranslation(Position);
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 12);
+                graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 12);
             }
         }
     }

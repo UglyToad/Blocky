@@ -1,4 +1,6 @@
-﻿namespace Blocky.Entities
+﻿using Blocky.Entities.Camera;
+
+namespace Blocky.Entities
 {
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Content;
