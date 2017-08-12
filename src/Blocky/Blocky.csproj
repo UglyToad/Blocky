@@ -44,22 +44,31 @@
   <ItemGroup>
     <Compile Include="Abstractions\IContentManager.cs" />
     <Compile Include="Annotations.cs" />
-    <Compile Include="Entities\BaseCamera.cs" />
+    <Compile Include="Entities\Camera\BaseCamera.cs" />
+    <Compile Include="Entities\Helpers\EffectHelpers.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Environment\Block.cs" />
-    <Compile Include="Entities\CubeFactory.cs" />
-    <Compile Include="Entities\FirstPersonCamera.cs" />
+    <Compile Include="Entities\Helpers\CubeFactory.cs" />
+    <Compile Include="Entities\Camera\FirstPersonCamera.cs" />
     <Compile Include="Entities\Robot.cs" />
-    <Compile Include="Entities\ViewMatrixSettings.cs" />
+    <Compile Include="Entities\Camera\ViewMatrixSettings.cs" />
+    <Compile Include="Environment\BlockType.cs" />
     <Compile Include="Environment\Logical\LogicalBlock.cs" />
     <Compile Include="Environment\Logical\LogicalTerrain.cs" />
-    <Compile Include="Environment\Terrain.cs" />
+    <Compile Include="Environment\Terrain\ITerrain.cs" />
+    <Compile Include="Environment\Terrain\Terrain.cs" />
+    <Compile Include="Environment\Terrain\TerrainGenerators\CubeTerrainGenerator.cs" />
+    <Compile Include="Environment\Terrain\TerrainGenerators\HillBillyGenerator.cs" />
+    <Compile Include="Environment\Terrain\TerrainGenerators\ITerrainGenerator.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Array3D.cs" />
+    <Compile Include="Util\Array3DExtensions.cs" />
     <Compile Include="Util\Collection3D.cs" />
     <Compile Include="Util\ThreeDimensionalList.cs" />
     <Compile Include="Util\IntPoint3D.cs" />
+    <Compile Include="Util\VectorExtensions.cs" />
     <Compile Include="Util\WorldToLogicalSpaceConverter.cs" />
   </ItemGroup>
   <ItemGroup>

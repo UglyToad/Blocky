@@ -1,7 +1,7 @@
-﻿namespace Blocky.Entities
-{
-    using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
+namespace Blocky.Entities.Camera
+{
     public class ViewMatrixSettings
     {
         /// <summary>

@@ -1,8 +1,8 @@
-namespace Blocky.Entities
-{
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+namespace Blocky.Entities.Camera
+{
     public class FirstPersonCamera : BaseCamera
     {
         /// <summary>

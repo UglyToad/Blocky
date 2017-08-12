@@ -1,9 +1,11 @@
-﻿namespace Blocky
+﻿using Blocky.Entities.Camera;
+using Blocky.Environment.Terrain;
+using Blocky.Environment.Terrain.TerrainGenerators;
+
+namespace Blocky
 {
     using System;
-    using System.Reflection.Emit;
     using Entities;
-    using Environment;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
@@ -21,7 +23,7 @@
     {
         private readonly GraphicsDeviceManager graphics;
 
-        private Terrain terrain;
+        private ITerrain terrain;
 
         private SpriteFont font;
         private SpriteBatch fontBatch;
@@ -49,26 +51,14 @@
 
             // New camera code
             camera = new FirstPersonCamera(graphics.GraphicsDevice,
-                new ViewMatrixSettings(new Vector3(0, 5, 0), Vector3.Up, Vector3.Forward));
+                new ViewMatrixSettings(new Vector3(50, 100, 600), Vector3.Up, Vector3.Forward));
 
             IsMouseVisible = true;
             Mouse.SetPosition(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2);
 
-            terrain = new Terrain();
+            var terrainGenerator = new HillBillyGenerator(200, 200, 50);
 
-            Random random = new Random();
-            for (int x = -20; x < 20; x++)
-            {
-                for (int z = -20; z < 20; z++)
-                {
-                    terrain.AddBlockAt(new IntPoint3D(x, -1, z), GraphicsDevice);
-
-                    if (random.Next(3) == 0)
-                    {
-                        terrain.AddBlockAt(new IntPoint3D(x, 0, z), GraphicsDevice);
-                    }
-                }
-            }
+            terrain = new Terrain(terrainGenerator, GraphicsDevice);
 
             base.Initialize();
         }
@@ -86,8 +76,6 @@
             var state = Keyboard.GetState();
 
             var changeVector = new Vector3();
-
-
 
             if (state.IsKeyDown(Keys.W))
                 changeVector.Z -= 1;
@@ -112,7 +100,7 @@
             if (currentState.LeftButton == ButtonState.Pressed)
             {
                 output =
-                    $"X: {camera.ViewSettings.ViewMatrix.Rotation.X} Y: {camera.ViewSettings.ViewMatrix.Rotation.Y} Z: {camera.ViewSettings.ViewMatrix.Rotation.Z}" +
+                    //$"X: {camera.ViewSettings.ViewMatrix.Rotation.X} Y: {camera.ViewSettings.ViewMatrix.Rotation.Y} Z: {camera.ViewSettings.ViewMatrix.Rotation.Z}" +
                     $"\r\nx:{camera.ViewSettings.Position.X} Y: {camera.ViewSettings.Position.Y} Z: {camera.ViewSettings.Position.Z}";
 
 

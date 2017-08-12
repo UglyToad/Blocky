@@ -1,7 +1,8 @@
-﻿namespace Blocky.Tests.Unit.Entities
+﻿using Blocky.Entities.Helpers;
+
+namespace Blocky.Tests.Unit.Entities
 {
     using System.Linq;
-    using Blocky.Entities;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Shouldly;
@@ -15,40 +16,34 @@
             const int verticesInAFace = 6;
             const int facesInACube = 6;
 
-            var cube = CubeFactory.GetCube(BlockSize, 0, 0, 0);
+            var cube = CubeFactory.GetCubeWithDefaultFaces(BlockSize);
 
             cube.Length.ShouldBe(verticesInAFace * facesInACube);
         }
 
         /// <summary>
-        ///  _+ size__
-        /// |         |
-        /// |    _    |
-        /// |         |
-        /// |__- size_|
+        ///  _+ size /2__
+        /// |            |
+        /// |    _       |
+        /// |            |
+        /// |__- size /2_|
         /// </summary>
         public void CubeAtOrigin()
         {
-            var cube = CubeFactory.GetCube(BlockSize, 0, 0, 0);
+            var cube = CubeFactory.GetCubeWithDefaultFaces(BlockSize);
 
-            AssertCubeBounds(new Vector3(-BlockSize, -BlockSize, -BlockSize), 
-                new Vector3(BlockSize, BlockSize, BlockSize), cube);
-        }
+            const float halfSize = BlockSize / 2f;
 
-        public void CubeAtOffset()
-        {
-            var cube = CubeFactory.GetCube(BlockSize, 1, 2, 0);
-
-            AssertCubeBounds(new Vector3(1-BlockSize, 2-BlockSize, -BlockSize), 
-                new Vector3(1 + BlockSize, 2 + BlockSize, BlockSize), cube);
+            AssertCubeBounds(new Vector3(-halfSize, -halfSize, -halfSize), 
+                new Vector3(halfSize, halfSize, halfSize), cube);
         }
 
         public void BlockSizesChangesCube()
         {
-            var cube = CubeFactory.GetCube(3, 0, 0, 0);
+            var cube = CubeFactory.GetCubeWithDefaultFaces(3);
 
-            AssertCubeBounds(new Vector3(-3, -3, -3), 
-                new Vector3(3, 3, 3), cube);
+            AssertCubeBounds(new Vector3(-1.5f, -1.5f, -1.5f), 
+                new Vector3(1.5f, 1.5f, 1.5f), cube);
         }
 
         private static void AssertCubeBounds(Vector3 minimum, Vector3 maximum, VertexPositionColor[] cube)
