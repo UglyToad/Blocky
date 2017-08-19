@@ -8,7 +8,7 @@ namespace Blocky.Entities.Environment
 {
     public class Block
     {
-        private const int BlockSize = 2;
+        public const int BlockSize = 2;
 
         private readonly GraphicsDevice graphicsDevice;
 

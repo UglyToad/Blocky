@@ -39,39 +39,38 @@ namespace Blocky.Entities
 
         public void Update(GameTime gameTime, UpdateChanges changes)
         {
-            leftRightRotation += changes.GetLeftRightRotation * RotationSpeed;
+            leftRightRotation += changes.LeftRightRotation * RotationSpeed;
 
             var rotationMatrix = Matrix.CreateRotationY(leftRightRotation);
 
-            Position += Vector3.Transform(changes.GetChangeVector(), rotationMatrix) * MovementSpeed;
+            Position += Vector3.Transform(changes.ChangeVector, rotationMatrix) * MovementSpeed;
         }
 
         public void Draw(GameTime gameTime)
         {
-            if (model == null)
-            {
-                return;
-            }
+            var transforms = new Matrix[model.Bones.Count];
 
-            Matrix[] transforms = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transforms);
+
             foreach (var mesh in model.Meshes)
             {
                 foreach (var effectObject in mesh.Effects)
                 {
                     var basicEffect = (BasicEffect)effectObject;
 
-                    basicEffect.EnableDefaultLighting();
+                    basicEffect.InitializeDrawEffect(camera);
                     basicEffect.PreferPerPixelLighting = true;
 
-                    basicEffect.World = Matrix.Identity *
-                                        Matrix.CreateRotationY(leftRightRotation) * Matrix.CreateTranslation(Position);
-                    basicEffect.View = camera.ViewSettings.ViewMatrix;
-                    basicEffect.Projection = camera.ProjectionMatrix;
+                    basicEffect.World = Matrix.Identity * Matrix.CreateRotationY(leftRightRotation) * Matrix.CreateTranslation(Position);
                 }
 
                 mesh.Draw();
             }
+        }
+
+        public bool IsOccupied(Vector3 position)
+        {
+            return false;
         }
     }
 }

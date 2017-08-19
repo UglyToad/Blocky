@@ -10,6 +10,7 @@ namespace Blocky.Entities.Helpers
             effect.Projection = camera.ProjectionMatrix;
             effect.View = camera.ViewSettings.ViewMatrix;
             effect.VertexColorEnabled = true;
+            effect.EnableDefaultLighting();
         }
     }
 }

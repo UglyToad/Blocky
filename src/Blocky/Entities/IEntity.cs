@@ -12,5 +12,7 @@ namespace Blocky.Entities
         void Update(GameTime gameTime, UpdateChanges changes);
 
         void Draw(GameTime gameTime);
+
+        bool IsOccupied(Vector3 position);
     }
 }

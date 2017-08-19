@@ -62,5 +62,10 @@ namespace Blocky.Entities
 
             fontBatch.End();
         }
+
+        public bool IsOccupied(Vector3 position)
+        {
+            return false;
+        }
     }
 }

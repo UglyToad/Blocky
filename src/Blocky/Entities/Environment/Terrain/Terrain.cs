@@ -53,5 +53,16 @@ namespace Blocky.Entities.Environment.Terrain
                 block.Draw(camera);
             }
         }
+
+        public bool IsOccupied(Vector3 position)
+        {
+            var positionScaled = position / Block.BlockSize;
+
+            if (terrainData.Depth - 1 < positionScaled.Z || 0 > positionScaled.Z) return false;
+            if (terrainData.Width - 1 < positionScaled.X || 0 > positionScaled.X) return false;
+            if (terrainData.Height - 1 < positionScaled.Y || 0 > positionScaled.Y) return false;
+
+            return terrainData[positionScaled.ToIntPoint3D()] != (byte) BlockType.None;
+        }
     }
 }

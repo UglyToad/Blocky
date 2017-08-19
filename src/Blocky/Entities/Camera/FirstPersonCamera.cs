@@ -27,17 +27,25 @@ namespace Blocky.Entities.Camera
 
         public override void Update(GameTime gameTime, UpdateChanges changes)
         {
-            leftRightRotation += changes.GetLeftRightRotation * RotationSpeed;
-            upDownRotation += changes.GetUpDownRotation * RotationSpeed;
+            leftRightRotation += changes.LeftRightRotation * RotationSpeed;
+            upDownRotation += changes.UpDownRotation * RotationSpeed;
 
-            var rotationMatrix = Matrix.CreateRotationY(leftRightRotation);
-            var rotationMatrix2 = Matrix.CreateRotationX(upDownRotation) * Matrix.CreateRotationY(leftRightRotation);
+            var positionRotation = Matrix.CreateRotationY(leftRightRotation);
 
-            Vector3 transformed = Vector3.Transform(cameraReference, rotationMatrix2);
+            var targetRotation = Matrix.CreateRotationX(upDownRotation) * Matrix.CreateRotationY(leftRightRotation);
 
-            ViewSettings.Position += Vector3.Transform(changes.GetChangeVector(), rotationMatrix) * MovementSpeed;
+            var potentialPosition = ViewSettings.Position + Vector3.Transform(changes.ChangeVector, positionRotation) * MovementSpeed;
 
-            ViewSettings.Target = transformed + ViewSettings.Position;
+            if (changes.IsOccupied(potentialPosition - new Vector3(0, 6, 0)))
+            {
+                changes.MidJump = false;
+            }
+            else
+            {
+                ViewSettings.Position = potentialPosition;
+            }
+
+            ViewSettings.Target = Vector3.Transform(cameraReference, targetRotation) + ViewSettings.Position;
         }
     }
 }

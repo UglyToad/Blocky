@@ -17,12 +17,12 @@ namespace Blocky
     /// </summary>
     public class BlockyGame : Game
     {
-        private MouseState previousState;
-
         private IEntity[] entities;
 
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager graphics;
+
+        private UpdateChanges updateChanges;
 
         public BlockyGame()
         {
@@ -40,10 +40,8 @@ namespace Blocky
         /// </summary>
         private void InitializeEntities()
         {
-            var viewMatrixSettings = new ViewMatrixSettings(new Vector3(50, 100, 300), Vector3.Up, Vector3.Forward);
+            var viewMatrixSettings = new ViewMatrixSettings(new Vector3(50, 50, 50), Vector3.Up, Vector3.Forward);
             var camera = new FirstPersonCamera(this, GraphicsDevice, viewMatrixSettings);
-
-            //var player = new Player(this, new Vector3(0, 2, 0), camera);
 
             var telemetry = new Telemetry(this, GraphicsDevice, camera);
 
@@ -54,9 +52,10 @@ namespace Blocky
             {
                 terrain,
                 camera,
-                //player,
                 telemetry
             };
+
+            updateChanges = new UpdateChanges(entities);
         }
 
         protected override void Initialize()
@@ -76,7 +75,7 @@ namespace Blocky
 
         protected override void LoadContent()
         {
-            previousState = Mouse.GetState();
+            updateChanges.Load();
 
             foreach (var entity in entities)
             {
@@ -86,18 +85,12 @@ namespace Blocky
 
         protected override void Update(GameTime gameTime)
         {
-            var keybordState = Keyboard.GetState();
-
-            var currentState = Mouse.GetState();
-
-            var updateChanges = new UpdateChanges(keybordState, currentState, previousState);
+            updateChanges.Update(gameTime);
 
             foreach (var entity in entities)
             {
                 entity.Update(gameTime, updateChanges);
             }
-
-            previousState = currentState;
 
             base.Update(gameTime);
         }

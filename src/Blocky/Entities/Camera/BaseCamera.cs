@@ -37,5 +37,9 @@ namespace Blocky.Entities.Camera
 
         public void Draw(GameTime gameTime) { }
 
+        public bool IsOccupied(Vector3 position)
+        {
+            return false;
+        }
     }
 }
