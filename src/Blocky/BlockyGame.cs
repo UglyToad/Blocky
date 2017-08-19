@@ -20,6 +20,8 @@ namespace Blocky
         private MouseState previousState;
 
         private IEntity[] entities;
+
+        // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager graphics;
 
         public BlockyGame()
@@ -33,23 +35,26 @@ namespace Blocky
             Content.RootDirectory = "Content";
         }
 
+        /// <summary>
+        /// Bind all entities here.
+        /// </summary>
         private void InitializeEntities()
         {
-            var viewMatrixSettings = new ViewMatrixSettings(new Vector3(50, 100, 600), Vector3.Up, Vector3.Forward);
-            var camera = new FirstPersonCamera(this, graphics.GraphicsDevice, viewMatrixSettings);
+            var viewMatrixSettings = new ViewMatrixSettings(new Vector3(50, 100, 300), Vector3.Up, Vector3.Forward);
+            var camera = new FirstPersonCamera(this, GraphicsDevice, viewMatrixSettings);
 
-            var player = new Player(this, new Vector3(0, 2, 0), camera);
+            //var player = new Player(this, new Vector3(0, 2, 0), camera);
 
-            var telemetry = new Telemetry(this, graphics, GraphicsDevice, camera);
+            var telemetry = new Telemetry(this, GraphicsDevice, camera);
 
-            var terrainGenerator = new HillBillyGenerator(200, 200, 50);
-            var terrain = new Terrain(this, terrainGenerator, GraphicsDevice, camera);
+            var terrainGenerator = new HillBillyGenerator(100, 100, 50);
+            var terrain = new Terrain(this, GraphicsDevice, terrainGenerator, camera);
 
             entities = new IEntity[]
             {
                 terrain,
                 camera,
-                player,
+                //player,
                 telemetry
             };
         }

@@ -18,10 +18,10 @@ namespace Blocky.Entities.Environment.Terrain
 
         private Block[] exposedBlocks;
 
-        public Terrain(Game game, ITerrainGenerator generator, GraphicsDevice graphicsDevice, BaseCamera camera) : base(game)
+        public Terrain(Game game, GraphicsDevice graphicsDevice, ITerrainGenerator generator, BaseCamera camera) : base(game)
         {
-            this.generator = generator;
             this.graphicsDevice = graphicsDevice;
+            this.generator = generator;
             this.camera = camera;
         }
 
