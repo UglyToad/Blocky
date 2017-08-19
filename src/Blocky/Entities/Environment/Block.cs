@@ -4,7 +4,7 @@ using Blocky.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Blocky.Environment
+namespace Blocky.Entities.Environment
 {
     public class Block
     {

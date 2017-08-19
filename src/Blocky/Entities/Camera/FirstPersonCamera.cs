@@ -1,3 +1,4 @@
+using Blocky.Entities.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -19,22 +20,22 @@ namespace Blocky.Entities.Camera
         private const float RotationSpeed = 0.005f;
         private const float MovementSpeed = 0.5f;
 
-        public FirstPersonCamera(GraphicsDevice graphicsDevice, ViewMatrixSettings viewMatrixSettings) : base(graphicsDevice, viewMatrixSettings)
+        public FirstPersonCamera(Game game, GraphicsDevice graphicsDevice, ViewMatrixSettings viewMatrixSettings) : base(game, graphicsDevice, viewMatrixSettings)
         {
             cameraReference = viewMatrixSettings.Target;
         }
 
-        public void Update(Vector3 translation, float leftRight, float upDown)
+        public override void Update(GameTime gameTime, UpdateChanges changes)
         {
-            leftRightRotation += leftRight*RotationSpeed;
-            upDownRotation += upDown*RotationSpeed;
+            leftRightRotation += changes.GetLeftRightRotation * RotationSpeed;
+            upDownRotation += changes.GetUpDownRotation * RotationSpeed;
 
             var rotationMatrix = Matrix.CreateRotationY(leftRightRotation);
             var rotationMatrix2 = Matrix.CreateRotationX(upDownRotation) * Matrix.CreateRotationY(leftRightRotation);
 
             Vector3 transformed = Vector3.Transform(cameraReference, rotationMatrix2);
-            
-            ViewSettings.Position += Vector3.Transform(translation, rotationMatrix)*MovementSpeed;
+
+            ViewSettings.Position += Vector3.Transform(changes.GetChangeVector(), rotationMatrix) * MovementSpeed;
 
             ViewSettings.Target = transformed + ViewSettings.Position;
         }

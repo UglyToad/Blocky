@@ -1,6 +1,6 @@
 ﻿using Blocky.Util;
 
-namespace Blocky.Environment.Terrain.TerrainGenerators
+namespace Blocky.Entities.Environment.Terrain.TerrainGenerators
 {
     public class CubeTerrainGenerator : ITerrainGenerator
     {

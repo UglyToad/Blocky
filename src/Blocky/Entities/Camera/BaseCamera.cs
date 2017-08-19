@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Blocky.Entities.Helpers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Blocky.Entities.Camera
 {
-    public abstract class BaseCamera
+    public abstract class BaseCamera : GameComponent, IEntity
     {
         protected readonly GraphicsDevice GraphicsDevice;
 
@@ -22,10 +23,19 @@ namespace Blocky.Entities.Camera
             }
         }
 
-        protected BaseCamera(GraphicsDevice graphicsDevice, ViewMatrixSettings viewMatrixSettings)
+        protected BaseCamera(Game game, GraphicsDevice graphicsDevice, ViewMatrixSettings viewMatrixSettings) : base(game)
         {
             GraphicsDevice = graphicsDevice;
             ViewSettings = viewMatrixSettings;
         }
+
+        public override void Initialize() { }
+
+        public void LoadContent() { }
+
+        public abstract void Update(GameTime gameTime, UpdateChanges changes);
+
+        public void Draw(GameTime gameTime) { }
+
     }
 }
