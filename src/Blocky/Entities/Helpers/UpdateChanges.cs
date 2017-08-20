@@ -55,8 +55,8 @@ namespace Blocky.Entities.Helpers
             if (mouseLocked)
             {
                 Mouse.SetCursor(MouseCursor.No);
-                var lockX = graphicsDevice.Viewport.Bounds.X / 2;
-                var lockY = graphicsDevice.Viewport.Bounds.Y / 2;
+                const int lockX = 0;
+                const int lockY = 0;
 
                 CurrentMouseState = Mouse.GetState();
 
