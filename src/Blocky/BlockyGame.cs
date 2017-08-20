@@ -55,14 +55,13 @@ namespace Blocky
                 telemetry
             };
 
-            updateChanges = new UpdateChanges(entities);
+            updateChanges = new UpdateChanges(entities, GraphicsDevice);
         }
 
         protected override void Initialize()
         {
             InitializeEntities();
 
-            IsMouseVisible = true;
             Mouse.SetPosition(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2);
 
             foreach (var entity in entities)
@@ -75,8 +74,6 @@ namespace Blocky
 
         protected override void LoadContent()
         {
-            updateChanges.Load();
-
             foreach (var entity in entities)
             {
                 entity.LoadContent();

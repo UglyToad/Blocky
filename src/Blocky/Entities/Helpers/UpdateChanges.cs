@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Blocky.Entities.Helpers
@@ -7,13 +8,13 @@ namespace Blocky.Entities.Helpers
     public class UpdateChanges
     {
         private readonly IEntity[] entities;
+        private readonly GraphicsDevice graphicsDevice;
 
         public KeyboardState KeyboardState { get; private set; }
 
         public MouseState CurrentMouseState { get; private set; }
 
-        public MouseState PrevMouseState { get; private set; }
-
+        private bool mouseLocked = true;
 
         public int LeftRightRotation { get; private set; }
 
@@ -29,29 +30,58 @@ namespace Blocky.Entities.Helpers
 
         private int jumpTicks;
 
-        public UpdateChanges(IEntity[] entities)
+        public UpdateChanges(IEntity[] entities, GraphicsDevice graphicsDevice)
         {
             this.entities = entities;
-        }
-
-        public void Load()
-        {
-            PrevMouseState = Mouse.GetState();
+            this.graphicsDevice = graphicsDevice;
         }
 
         public void Update(GameTime gameTime)
         {
-            CurrentMouseState = Mouse.GetState();
-
             KeyboardState = Keyboard.GetState();
 
-            LeftRightRotation = -(CurrentMouseState.X - PrevMouseState.X);
+            if (KeyboardState.IsKeyDown(Keys.Escape))
+            {
+                mouseLocked = false;
+            }
 
-            UpDownRotation = -(CurrentMouseState.Y - PrevMouseState.Y);
+            UpdateMouse();
 
             ChangeVector = ApplyGravity(GetChangeVector(), gameTime);
+        }
 
-            PrevMouseState = CurrentMouseState;
+        private void UpdateMouse()
+        {
+            if (mouseLocked)
+            {
+                Mouse.SetCursor(MouseCursor.No);
+                var lockX = graphicsDevice.Viewport.Bounds.X / 2;
+                var lockY = graphicsDevice.Viewport.Bounds.Y / 2;
+
+                CurrentMouseState = Mouse.GetState();
+
+                Mouse.SetPosition(lockX, lockY);
+
+                LeftRightRotation = -(CurrentMouseState.X - lockX);
+
+                UpDownRotation = -(CurrentMouseState.Y - lockY);
+            } else if (IsMouseInsideWindow())
+            {
+                Mouse.SetCursor(MouseCursor.Arrow);
+
+                var state = Mouse.GetState();
+
+                if (state.LeftButton == ButtonState.Pressed) mouseLocked = true;
+            }
+        }
+
+        private bool IsMouseInsideWindow()
+        {
+            var state = Mouse.GetState();
+
+            var position = new Point(state.X, state.Y);
+
+            return graphicsDevice.Viewport.Bounds.Contains(position);
         }
 
         private Vector3 ApplyGravity(Vector3 changeVector, GameTime gameTime)

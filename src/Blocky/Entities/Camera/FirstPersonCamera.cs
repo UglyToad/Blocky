@@ -1,3 +1,4 @@
+using System;
 using Blocky.Entities.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -28,7 +29,11 @@ namespace Blocky.Entities.Camera
         public override void Update(GameTime gameTime, UpdateChanges changes)
         {
             leftRightRotation += changes.LeftRightRotation * RotationSpeed;
+
             upDownRotation += changes.UpDownRotation * RotationSpeed;
+
+            // Cap mouse up/down rotation to + Pi/2 and almost - Pi/2 (Almost because the rotation matrix is cyclical i.e. -Pi/2 = Pi/2)
+            upDownRotation = upDownRotation > 0 ? Math.Min(upDownRotation, MathHelper.PiOver2) : Math.Max(upDownRotation, -MathHelper.PiOver2 + 0.01f);
 
             var positionRotation = Matrix.CreateRotationY(leftRightRotation);
 
