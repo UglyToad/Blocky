@@ -1,4 +1,4 @@
-﻿namespace Blocky.Environment
+﻿namespace Blocky.Entities.Environment
 {
     public enum BlockType
     {

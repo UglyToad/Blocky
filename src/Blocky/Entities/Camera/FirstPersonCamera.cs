@@ -1,3 +1,4 @@
+using Blocky.Entities.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -19,24 +20,32 @@ namespace Blocky.Entities.Camera
         private const float RotationSpeed = 0.005f;
         private const float MovementSpeed = 0.5f;
 
-        public FirstPersonCamera(GraphicsDevice graphicsDevice, ViewMatrixSettings viewMatrixSettings) : base(graphicsDevice, viewMatrixSettings)
+        public FirstPersonCamera(Game game, GraphicsDevice graphicsDevice, ViewMatrixSettings viewMatrixSettings) : base(game, graphicsDevice, viewMatrixSettings)
         {
             cameraReference = viewMatrixSettings.Target;
         }
 
-        public void Update(Vector3 translation, float leftRight, float upDown)
+        public override void Update(GameTime gameTime, UpdateChanges changes)
         {
-            leftRightRotation += leftRight*RotationSpeed;
-            upDownRotation += upDown*RotationSpeed;
+            leftRightRotation += changes.LeftRightRotation * RotationSpeed;
+            upDownRotation += changes.UpDownRotation * RotationSpeed;
 
-            var rotationMatrix = Matrix.CreateRotationY(leftRightRotation);
-            var rotationMatrix2 = Matrix.CreateRotationX(upDownRotation) * Matrix.CreateRotationY(leftRightRotation);
+            var positionRotation = Matrix.CreateRotationY(leftRightRotation);
 
-            Vector3 transformed = Vector3.Transform(cameraReference, rotationMatrix2);
-            
-            ViewSettings.Position += Vector3.Transform(translation, rotationMatrix)*MovementSpeed;
+            var targetRotation = Matrix.CreateRotationX(upDownRotation) * Matrix.CreateRotationY(leftRightRotation);
 
-            ViewSettings.Target = transformed + ViewSettings.Position;
+            var potentialPosition = ViewSettings.Position + Vector3.Transform(changes.ChangeVector, positionRotation) * MovementSpeed;
+
+            if (changes.IsOccupied(potentialPosition - new Vector3(0, 6, 0)))
+            {
+                changes.MidJump = false;
+            }
+            else
+            {
+                ViewSettings.Position = potentialPosition;
+            }
+
+            ViewSettings.Target = Vector3.Transform(cameraReference, targetRotation) + ViewSettings.Position;
         }
     }
 }

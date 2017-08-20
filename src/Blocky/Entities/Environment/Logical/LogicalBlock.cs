@@ -1,7 +1,7 @@
-﻿namespace Blocky.Environment.Logical
-{
-    using Util;
+﻿using Blocky.Util;
 
+namespace Blocky.Entities.Environment.Logical
+{
     public struct LogicalBlock
     {
         public IntPoint3D Location { get; }

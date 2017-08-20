@@ -1,12 +1,13 @@
 ﻿using Blocky.Entities.Camera;
+using Blocky.Entities.Helpers;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Blocky.Entities
 {
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
-
-    public class Player : GameComponent
+    public class Player : GameComponent, IEntity
     {
+        private readonly BaseCamera camera;
         private const float RotationSpeed = 0.005f;
         private const float MovementSpeed = 0.5f;
 
@@ -16,53 +17,60 @@ namespace Blocky.Entities
 
         private Model model;
 
-        public Player(Game game, Vector3 initialPosition) : base(game)
+        public Player(Game game, Vector3 initialPosition, BaseCamera camera) : base(game)
         {
+            this.camera = camera;
             Position = initialPosition;
         }
 
         public override void Initialize()
         {
             model = Game.Content.Load<Model>("box");
-           
+
             base.Initialize();
         }
 
-        public void Draw(BaseCamera camera)
+        void IEntity.Initialize()
         {
-            if (model == null)
-            {
-                return;
-            }
+            Initialize();
+        }
 
-            Matrix[] transforms = new Matrix[model.Bones.Count]; 
+        public void LoadContent() {}
+
+        public void Update(GameTime gameTime, UpdateChanges changes)
+        {
+            leftRightRotation += changes.LeftRightRotation * RotationSpeed;
+
+            var rotationMatrix = Matrix.CreateRotationY(leftRightRotation);
+
+            Position += Vector3.Transform(changes.ChangeVector, rotationMatrix) * MovementSpeed;
+        }
+
+        public void Draw(GameTime gameTime)
+        {
+            var transforms = new Matrix[model.Bones.Count];
+
             model.CopyAbsoluteBoneTransformsTo(transforms);
+
             foreach (var mesh in model.Meshes)
             {
                 foreach (var effectObject in mesh.Effects)
                 {
-                    var basicEffect = (BasicEffect) effectObject;
+                    var basicEffect = (BasicEffect)effectObject;
 
-                    basicEffect.EnableDefaultLighting();
+                    basicEffect.InitializeDrawEffect(camera);
                     basicEffect.PreferPerPixelLighting = true;
 
-                    basicEffect.World = Matrix.Identity*
-                                        Matrix.CreateRotationY(leftRightRotation) * Matrix.CreateTranslation(Position);
-                    basicEffect.View = camera.ViewSettings.ViewMatrix;
-                    basicEffect.Projection = camera.ProjectionMatrix;
+                    basicEffect.World = Matrix.Identity * Matrix.CreateRotationY(leftRightRotation) * Matrix.CreateTranslation(Position);
                 }
 
                 mesh.Draw();
             }
         }
 
-        internal void Update(GameTime gameTime, Vector3 changeVector, float rotation)
+        public bool IsOccupied(Vector3 position)
         {
-            leftRightRotation += rotation*RotationSpeed;
-
-            var rotationMatrix = Matrix.CreateRotationY(leftRightRotation);
-
-            Position += Vector3.Transform(changeVector, rotationMatrix) * MovementSpeed;
+            return false;
         }
     }
 }

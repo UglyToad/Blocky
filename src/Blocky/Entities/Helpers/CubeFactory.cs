@@ -90,13 +90,13 @@ namespace Blocky.Entities.Helpers
 
             foreach (var visibleFace in visibleFaces)
             {
-                result.AddRange(GetFaceVerteces(visibleFace, size));
+                result.AddRange(GetFaceVertices(visibleFace, size));
             }
 
             return result.ToArray();
         }
 
-        private static IEnumerable<VertexPositionColor> GetFaceVerteces(IntPoint3D faceVector, int scale)
+        private static IEnumerable<VertexPositionColor> GetFaceVertices(IntPoint3D faceVector, int scale)
         {
             var halfScale = scale / 2f;
 
